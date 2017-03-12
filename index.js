@@ -4,11 +4,11 @@ var privateKeyWIF = 'cQN511BWtc2dSUMWySmZpr6ShY1un4WK42JegGwkSFX5a8n9GWr3';
 
 var privateKey = bitcore.PrivateKey.fromWIF(privateKeyWIF);
 
-var sourceAddress = privateKey.toAddress();
+var sourceAddress = privateKey.toAddress(bitcore.Networks.testnet);
 
 console.log("Source address: " + sourceAddress);
 
-var targetAddress = (new bitcore.PrivateKey).toAddress();
+var targetAddress = (new bitcore.PrivateKey).toAddress(bitcore.Networks.testnet);
 
 console.log("Target address: " + targetAddress);
 
@@ -39,3 +39,4 @@ insight.getUnspentUtxos(sourceAddress, function(error, utxos) {
     });
   }
 });
+
