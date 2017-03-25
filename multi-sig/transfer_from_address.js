@@ -28,21 +28,37 @@ insight.getUnspentUtxos(sourceAddress, function(error, utxos){
     tx.from(utxos, publicKeys, 2);
     tx.to(targetAddress, 48792);
     tx.change(sourceAddress);
-    tx.sign(privateKeys[0]);
+
+    var firstSignatures = tx.getSignatures(privateKeys[0]);
 
 
-    serialized = tx.toObject();
+    var tx = new bitcore.Transaction();
+    tx.from(utxos, publicKeys, 2);
+    tx.to(targetAddress, 48792);
+    tx.change(sourceAddress);
 
-    var tx2 = new bitcore.Transaction(serialized);
-    tx2.sign(privateKeys[1]);
+
+    var secondSignatures = tx.getSignatures(privateKeys[1]);
+
+    var tx = new bitcore.Transaction();
+    tx.from(utxos, publicKeys, 2);
+    tx.to(targetAddress, 48792);
+    tx.change(sourceAddress);
 
 
-    insight.broadcast(tx2.serialize(), function(error, transactionId) {
+    tx.applySignature(firstSignatures[0]);
+    tx.applySignature(firstSignatures[1]);
+    tx.applySignature(secondSignatures[0]);
+    tx.applySignature(secondSignatures[1]);
+
+    insight.broadcast(tx.serialize(), function(error, transactionId) {
       if (error) {
         console.log(error);
       } else {
         console.log(transactionId);
       }
     });
+
+
   }
 });
